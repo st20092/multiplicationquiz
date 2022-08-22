@@ -1,7 +1,39 @@
+from msilib.schema import CompLocator
+import random
+from random import randint, randrange
 from tkinter import *
 from tkinter import ttk
 
-#class Data:
+class Data:
+
+    def __init__(self):
+
+        #question = []
+        #questiontimer = []
+
+        def generateeasy():
+
+            self.multichoices = []
+
+            self.qnumber1 = randrange(1, 10)
+            self.qnumber2 = randrange(1, 10)
+            self.qanswer = self.qnumber1 * self.qnumber2
+            self.multichoice.append(self.qanswer)
+
+            for n in range(3):
+                self.qdummy = randint(self.qanswer - 15, self.qanswer + 15)
+                self.multichoices.append(self.qdummy)
+
+            random.shuffle(self.multichoices)
+
+
+
+
+
+
+
+            
+
 
     #def answercheck:
 
@@ -14,7 +46,9 @@ class GUI:
 
     def __init__(self, parent):
 
+        self.data = Data()
 
+        def welcomescreen():
 
             #WELCOME SCREEN FRAME
             self.WelcomeFrame = Frame(parent, bg = "#9AC5DB")
@@ -35,7 +69,7 @@ class GUI:
             self.WelcomeButtonFrame = Frame(self.WelcomeFrame)
             self.WelcomeButtonFrame.grid(row = 1)
             
-            self.easybutton = Button(self.WelcomeButtonFrame)
+            self.easybutton = Button(self.WelcomeButtonFrame, command = easyscreen)
             self.easylabel = Label(self.easybutton, text = "Easy")
             self.easyyrlvl = Label(self.easybutton, text = "Year 1 - 2")
             self.easypb = Label(self.easybutton, text = "Your Best Time:\n18 Seconds")
@@ -65,27 +99,68 @@ class GUI:
             self.hardyrlvl.grid(column = 0, row = 1)
             self.hardpb.grid(column = 1, row = 0, rowspan = 2)
 
-    def easyscreen(self, parent):
+        def easyscreen():
 
-            self.WelcomeButtonFrame.forget()
-
+            self.data.generateeasy()
+            
+            self.WelcomeFrame.grid_forget()
+        
             #EASY SCREEN FRAME
             self.EasyFrame = Frame(parent)
+            self.EasyFrame.grid()
 
             #TOP FRAME
             self.TopFrame = Frame(self.EasyFrame)
+            self.TopFrame.grid(row = 0, column = 0)
+            self.progressbar = ttk.Progressbar(self.TopFrame, orient="horizontal", mode="determinate", length=150)
+            self.progressbar.grid(row = 0)
             self.easytitle = Label(self.TopFrame, text = "Multiplication Quiz - Easy")
+            self.easytitle.grid(row = 1)
+
+            self.MiddleLeftFrame = Frame(self.EasyFrame)
+            self.MiddleLeftFrame.grid(row = 1, column = 0)
+            self.infobutton = Button(self.MiddleLeftFrame)
+            self.infobutton.grid(row = 0, column = 2)
+            self.questiontext = Label(self.MiddleLeftFrame, text = "{} x {} = ".format(self.data.qnumber1, self.data.qnumber2))
+            self.questiontext.grid(row = 1, column = 2)
+            self.answerbox = Label(self.MiddleLeftFrame, text = "{}".format(self.selectednumber))
+            self.answerbox.grid(row = 1, column = 3)
+
+
+            
+            #MIDDLE FRAME
+            self.MiddleRightFrame = Frame(self.EasyFrame)
+
+            self.ArrayFrame = Frame(self.MiddleRightFrame)
+            
+            for y in range(self.qnumber2):
+                self.arrayrow = Frame(self.ArrayFrame)
+                self.arrayrow.grid()
+
+                for x in range(self.qnumber1):
+                    self.arraycircle = Label(self.arrowrow, text = "O")
+
+            #BOTTOM FRAME
+            self.BottomFrame = Frame(self.EasyFrame)
+            
+            self.submitbutton = Button(self.BottomFrame)
+
+
 
             
 
 
-        #def mediumscreen:
+        def mediumscreen():
+
+            self.WelcomeFrame.grid_forget()
+
+
 
 
 
         #def hardscreen:
 
-
+        welcomescreen()
 
 if __name__ == "__main__":
     root = Tk()
