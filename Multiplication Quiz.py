@@ -4,6 +4,7 @@ from random import randint, randrange
 from tkinter import *
 from tkinter import ttk
 from turtle import bgcolor
+from venv import create
 
 class Data:
 
@@ -46,8 +47,6 @@ class GUI:
     def __init__(self, parent):
 
         self.data = Data()
-
-        self.data.generateeasy()
 
         def progress():
             if self.progressbar['value'] < 100:
@@ -119,6 +118,8 @@ class GUI:
         def easyscreen():
             
             self.WelcomeFrame.grid_forget()
+
+            self.data.generateeasy()
         
             #EASY SCREEN FRAME
             self.EasyFrame = Frame(parent, bg="black")
@@ -138,7 +139,7 @@ class GUI:
             self.MiddleLeftFrame.grid(row = 1, column = 0)
             self.infobutton = Button(self.MiddleLeftFrame, text = "info")
             self.infobutton.grid(row = 0, column = 0)
-            self.questiontext = Label(self.MiddleLeftFrame, text = "hi")
+            self.questiontext = Label(self.MiddleLeftFrame, text = f"{self.data.qnumber1} x {self.data.qnumber2} = ")
             self.questiontext.grid(row = 1, column = 2)
             self.answerbox = Label(self.MiddleLeftFrame, text = "")
             self.answerbox.grid(row = 1, column = 3)
@@ -162,7 +163,7 @@ class GUI:
             
             self.submitbutton = Button(self.BottomFrame, command = progress, text = "progress")
             self.submitbutton.grid()
-
+        
             
 
 
