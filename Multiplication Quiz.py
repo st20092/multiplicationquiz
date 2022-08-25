@@ -3,7 +3,7 @@ import random
 from random import randint, randrange
 from tkinter import *
 from tkinter import ttk
-from turtle import bgcolor
+from turtle import bgcolor, color
 from venv import create
 
 class Data:
@@ -20,7 +20,7 @@ class Data:
 
     def generateeasy(self):
 
-        self.multichoices = []
+        self.multichoices.clear()
 
         self.qnumber1 = randrange(1, 10)
         self.qnumber2 = randrange(1, 10)
@@ -50,8 +50,13 @@ class GUI:
 
         def progress():
             if self.progressbar['value'] < 100:
-                self.progressbar['value'] += 5
-                createeasy()
+                if self.sn.get() == self.data.qanswer:
+                    self.progressbar['value'] += 5
+                    #self.results.configure(text = "Correct", color = "Green")
+                    createeasy()
+                else:
+                    self.easytitle.configure(bg="red")
+                    #self.results.configure(text = f"Incorrect {self.data.qanswer}", color = "Red")
             else:
                 self.submitbutton.grid_forget()
 
@@ -59,10 +64,15 @@ class GUI:
 
             self.data.generateeasy()
             self.questiontext.configure(text = f"{self.data.qnumber1} x {self.data.qnumber2} = ")
+            self.rb1.configure(text = self.data.multichoices[0], value = self.data.multichoices[0])
+            self.rb2.configure(text = self.data.multichoices[1], value = self.data.multichoices[1])
+            self.rb3.configure(text = self.data.multichoices[2], value = self.data.multichoices[2])
+            self.rb4.configure(text = self.data.multichoices[3], value = self.data.multichoices[3])
+            self.answerbox.configure(text = "")
 
         def selectnumber():
                 
-                self.answerbox.configure(text = f"{self.selectednumber.get()}")
+                self.answerbox.configure(text = f"{self.sn.get()}")
 
         def welcomescreen():
 
@@ -117,13 +127,19 @@ class GUI:
 
         def easyscreen():
             
+            #EASY FRAME FUNCTIONS
             self.WelcomeFrame.grid_forget()
 
             self.data.generateeasy()
+
+            self.sn = IntVar()
+            self.sn.set(None)
         
+
             #EASY SCREEN FRAME
-            self.EasyFrame = Frame(parent, bg="black")
+            self.EasyFrame = Frame(parent)
             self.EasyFrame.grid()
+
 
             #TOP FRAME
             self.TopFrame = Frame(self.EasyFrame)
@@ -143,6 +159,21 @@ class GUI:
             self.questiontext.grid(row = 1, column = 2)
             self.answerbox = Label(self.MiddleLeftFrame, text = "")
             self.answerbox.grid(row = 1, column = 3)
+            self.results = Label(self.MiddleLeftFrame, text = "")
+            self.results.grid(row = 1, column = 4)
+
+            #RADIOBUTTONS
+            self.RbFrame = Frame(self.MiddleLeftFrame)
+            self.RbFrame.grid(row = 2)
+
+            self.rb1 = Radiobutton(self.RbFrame, text = self.data.multichoices[0], value = self.data.multichoices[0], variable = self.sn, command = selectnumber)
+            self.rb1.grid(row = 0, column = 0, sticky = W)
+            self.rb2 = Radiobutton(self.RbFrame, text = self.data.multichoices[1], value = self.data.multichoices[1], variable = self.sn, command = selectnumber)
+            self.rb2.grid(row = 0, column = 1, sticky = W)
+            self.rb3 = Radiobutton(self.RbFrame, text = self.data.multichoices[2], value = self.data.multichoices[2], variable = self.sn, command = selectnumber)
+            self.rb3.grid(row = 1, column = 0, sticky = W)
+            self.rb4 = Radiobutton(self.RbFrame, text = self.data.multichoices[3], value = self.data.multichoices[3], variable = self.sn, command = selectnumber)
+            self.rb4.grid(row = 1, column = 1, sticky = W)
 
 
             #MIDDLE RIGHT FRAME
