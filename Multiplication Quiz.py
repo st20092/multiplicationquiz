@@ -3,6 +3,7 @@ import random
 from random import randint, randrange
 from tkinter import *
 from tkinter import ttk
+from turtle import bgcolor
 
 class Data:
 
@@ -11,32 +12,30 @@ class Data:
         #question = []
         #questiontimer = []
 
-        def generateeasy():
+        self.qnumber1 = None
+        self.qnumber2 = None
+        self.qanswer = None
+        self.multichoices = []
 
-            self.multichoices = []
+    def generateeasy(self):
 
-            self.qnumber1 = randrange(1, 10)
-            self.qnumber2 = randrange(1, 10)
-            self.qanswer = self.qnumber1 * self.qnumber2
-            self.multichoice.append(self.qanswer)
+        self.multichoices = []
 
-            for n in range(3):
-                self.qdummy = randint(self.qanswer - 15, self.qanswer + 15)
-                self.multichoices.append(self.qdummy)
+        self.qnumber1 = randrange(1, 10)
+        self.qnumber2 = randrange(1, 10)
+        self.qanswer = self.qnumber1 * self.qnumber2
+        self.multichoices.append(self.qanswer)
 
-            random.shuffle(self.multichoices)
+        for n in range(3):
+            self.qdummy = randint(self.qanswer - 15, self.qanswer + 15)
+            self.multichoices.append(self.qdummy)
 
-
-
-
-
-
-
+        random.shuffle(self.multichoices)
             
+    def answercheck(self):
 
-
-    #def answercheck:
-
+        if self.gui.selectedanswer == self.qanswer:
+            self.generateeasy()
 
     #def runclock1:
 
@@ -47,6 +46,24 @@ class GUI:
     def __init__(self, parent):
 
         self.data = Data()
+
+        self.data.generateeasy()
+
+        def progress():
+            if self.progressbar['value'] < 100:
+                self.progressbar['value'] += 5
+                createeasy()
+            else:
+                self.submitbutton.grid_forget()
+
+        def createeasy():
+
+            self.data.generateeasy()
+            self.questiontext.configure(text = f"{self.data.qnumber1} x {self.data.qnumber2} = ")
+
+        def selectnumber():
+                
+                self.answerbox.configure(text = f"{self.selectednumber.get()}")
 
         def welcomescreen():
 
@@ -100,13 +117,11 @@ class GUI:
             self.hardpb.grid(column = 1, row = 0, rowspan = 2)
 
         def easyscreen():
-
-            self.data.generateeasy()
             
             self.WelcomeFrame.grid_forget()
         
             #EASY SCREEN FRAME
-            self.EasyFrame = Frame(parent)
+            self.EasyFrame = Frame(parent, bg="black")
             self.EasyFrame.grid()
 
             #TOP FRAME
@@ -117,35 +132,36 @@ class GUI:
             self.easytitle = Label(self.TopFrame, text = "Multiplication Quiz - Easy")
             self.easytitle.grid(row = 1)
 
+
+            #MIDDLE LEFT FRAME
             self.MiddleLeftFrame = Frame(self.EasyFrame)
             self.MiddleLeftFrame.grid(row = 1, column = 0)
-            self.infobutton = Button(self.MiddleLeftFrame)
-            self.infobutton.grid(row = 0, column = 2)
-            self.questiontext = Label(self.MiddleLeftFrame, text = "{} x {} = ".format(self.data.qnumber1, self.data.qnumber2))
+            self.infobutton = Button(self.MiddleLeftFrame, text = "info")
+            self.infobutton.grid(row = 0, column = 0)
+            self.questiontext = Label(self.MiddleLeftFrame, text = "hi")
             self.questiontext.grid(row = 1, column = 2)
-            self.answerbox = Label(self.MiddleLeftFrame, text = "{}".format(self.selectednumber))
+            self.answerbox = Label(self.MiddleLeftFrame, text = "")
             self.answerbox.grid(row = 1, column = 3)
 
 
-            
-            #MIDDLE FRAME
-            self.MiddleRightFrame = Frame(self.EasyFrame)
+            #MIDDLE RIGHT FRAME
+            #self.MiddleRightFrame = Frame(self.EasyFrame)
 
-            self.ArrayFrame = Frame(self.MiddleRightFrame)
+            #self.ArrayFrame = Frame(self.MiddleRightFrame)
             
-            for y in range(self.qnumber2):
-                self.arrayrow = Frame(self.ArrayFrame)
-                self.arrayrow.grid()
+            #for y in range(self.qnumber2):
+                #self.arrayrow = Frame(self.ArrayFrame)
+                #self.arrayrow.grid()
 
-                for x in range(self.qnumber1):
-                    self.arraycircle = Label(self.arrowrow, text = "O")
+                #for x in range(self.qnumber1):
+                    #self.arraycircle = Label(self.arrowrow, text = "O")
 
             #BOTTOM FRAME
             self.BottomFrame = Frame(self.EasyFrame)
+            self.BottomFrame.grid(row = 2)
             
-            self.submitbutton = Button(self.BottomFrame)
-
-
+            self.submitbutton = Button(self.BottomFrame, command = progress, text = "progress")
+            self.submitbutton.grid()
 
             
 
