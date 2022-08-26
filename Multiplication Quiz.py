@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter import ttk
 from turtle import bgcolor, color
 from venv import create
+import tkinter as tk
 
 class Data:
 
@@ -32,6 +33,11 @@ class Data:
             self.multichoices.append(self.qdummy)
 
         random.shuffle(self.multichoices)
+
+    def generatemedium(self):
+        
+        self.qnumber1 = randrange(1,99)
+        self.qnumber2
             
     def answercheck(self):
 
@@ -48,6 +54,8 @@ class GUI:
 
         self.data = Data()
 
+
+        #GUI Functions
         def progress():
             if self.progressbar['value'] < 100:
                 if self.sn.get() == self.data.qanswer:
@@ -60,9 +68,11 @@ class GUI:
             else:
                 self.submitbutton.grid_forget()
 
+
         def createeasy():
 
             self.data.generateeasy()
+            createarray()
             self.questiontext.configure(text = f"{self.data.qnumber1} x {self.data.qnumber2} = ")
             self.rb1.configure(text = self.data.multichoices[0], value = self.data.multichoices[0])
             self.rb2.configure(text = self.data.multichoices[1], value = self.data.multichoices[1])
@@ -70,9 +80,28 @@ class GUI:
             self.rb4.configure(text = self.data.multichoices[3], value = self.data.multichoices[3])
             self.answerbox.configure(text = "")
 
+
         def selectnumber():
                 
                 self.answerbox.configure(text = f"{self.sn.get()}")
+        
+        #CREATE ARRAY FUNC
+        def createarray():
+
+            self.ArrayFrame2.destroy()
+
+            self.ArrayFrame2 = Frame(self.ArrayFrame)
+            self.ArrayFrame2.grid()
+
+            for y in range(self.data.qnumber2):
+                self.arrayrow = Frame(self.ArrayFrame2)
+                self.arrayrow.grid()
+
+                for x in range(self.data.qnumber1):
+                    self.arraycircle = Label(self.arrayrow, text = "O")
+                    self.arraycircle.pack(side=tk.LEFT)
+
+
 
         def welcomescreen():
 
@@ -125,13 +154,16 @@ class GUI:
             self.hardyrlvl.grid(column = 0, row = 1)
             self.hardpb.grid(column = 1, row = 0, rowspan = 2)
 
+
+
+
         def easyscreen():
             
             #EASY FRAME FUNCTIONS
             self.WelcomeFrame.grid_forget()
 
             self.data.generateeasy()
-
+    
             self.sn = IntVar()
             self.sn.set(None)
         
@@ -177,16 +209,22 @@ class GUI:
 
 
             #MIDDLE RIGHT FRAME
-            #self.MiddleRightFrame = Frame(self.EasyFrame)
+            self.MiddleRightFrame = Frame(self.EasyFrame)
+            self.MiddleRightFrame.grid(row = 1, column = 1)
 
-            #self.ArrayFrame = Frame(self.MiddleRightFrame)
-            
-            #for y in range(self.qnumber2):
-                #self.arrayrow = Frame(self.ArrayFrame)
-                #self.arrayrow.grid()
+            self.ArrayFrame = Frame(self.MiddleRightFrame)
+            self.ArrayFrame.grid()
 
-                #for x in range(self.qnumber1):
-                    #self.arraycircle = Label(self.arrowrow, text = "O")
+            self.ArrayFrame2 = Frame(self.ArrayFrame)
+            self.ArrayFrame2.grid()
+
+            for y in range(self.data.qnumber2):
+                self.arrayrow = Frame(self.ArrayFrame2)
+                self.arrayrow.grid()
+
+                for x in range(self.data.qnumber1):
+                    self.arraycircle = Label(self.arrayrow, text = "O")
+                    self.arraycircle.pack(side=tk.LEFT)
 
             #BOTTOM FRAME
             self.BottomFrame = Frame(self.EasyFrame)
@@ -200,7 +238,15 @@ class GUI:
 
         def mediumscreen():
 
+            #MEDIUM FRAME FUNCTIONS
             self.WelcomeFrame.grid_forget()
+
+            self.data.generat
+
+            #MEDIUM FRAME
+            self.MediumFrame = Frame(parent)
+            self.MediumFrame.grid()
+
 
 
 
