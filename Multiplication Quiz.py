@@ -12,14 +12,12 @@ class Data:
 
     def __init__(self):
 
-        #question = []
-        #questiontimer = []
-
-        self.qnumber1 = None
-        self.qnumber2 = None
-        self.qanswer = None
         self.multichoices = []
+        self.questiontimes = []
 
+        self.questionlist = []
+
+    #QUIZ GENERATING FUNCTIONS
     def generateeasy(self):
 
         self.multichoices.clear()
@@ -40,15 +38,19 @@ class Data:
         self.qnumber1 = randrange(1,12)
         self.qnumber2 = randrange(1,12)
         self.qanswer = self.qnumber1 * self.qnumber2
-            
-    def answercheck(self):
+    
 
-        if self.gui.selectedanswer == self.qanswer:
-            self.generateeasy()
+    #TIME KEEPING FUNCTIONS
 
-    #def runclock1:
+    #RESET VARIABLES FUNCTION
 
-    #def runclock2: 
+    def clearvariables(self):
+        self.qnumber1 = None
+        self.qnumber2 = None
+        self.qanswer = None
+        self.questionlist.clear()
+        self.questiontimes.clear()
+
     
 class GUI:
 
@@ -132,6 +134,7 @@ class GUI:
                     self.arraycircle = Label(self.arrayrow, text = "O")
                     self.arraycircle.pack(side=tk.LEFT)
 
+        #TIME KEEPING
 
 
         def welcomescreen():
@@ -197,7 +200,6 @@ class GUI:
     
             self.sn = IntVar()
             self.sn.set(None)
-        
 
             #EASY SCREEN FRAME
             self.QuizFrame = Frame(parent)
@@ -336,11 +338,11 @@ class GUI:
 
             self.bigtext = Label(self.TextFrame, text = "HI 1")
             self.bigtext.grid()
-            self.scorelabel = Label(self.TextFrame, text = "HI 1")
+            self.scorelabel = Label(self.TextFrame, text = "HI 2")
             self.scorelabel.grid()
-            self.timelabel = Label(self.TextFrame, text = "HI 1")
+            self.timelabel = Label(self.TextFrame, text = "HI 3")
             self.timelabel.grid()
-            self.smalltext = Label(self.TextFrame, text = "HI 1")
+            self.smalltext = Label(self.TextFrame, text = "HI 4")
             self.smalltext.grid()
 
             #BUTTON FRAME
@@ -350,10 +352,51 @@ class GUI:
             self.menubutton = Button(self.ButtomFrame, text = "Back to Menu")
             self.menubutton.grid(row = 0, column = 0)
 
-            self.resultbutton = Button(self.ButtomFrame,text = "View Results")
+            self.resultbutton = Button(self.ButtomFrame,text = "View Results", command = resultscreen)
             self.resultbutton.grid(row = 0, column = 1)
             
 
+        def resultscreen():
+
+            #RESULT SCREEN FUNCTIONS
+            self.FinishFrame.grid_forget()
+
+            #RESULTS FRAME
+            self.ResultsFrame = Frame(parent)
+            self.ResultsFrame.grid(row = 1)
+
+            self.resulttitle = Label(self.ResultsFrame, text = "Your Results")
+            self.resulttitle.grid(columnspan=2)
+
+            #INFO FRAME
+            self.InfoFrame = Frame(self.ResultsFrame)
+            self.InfoFrame.grid(row = 1, column=0)
+            self.avgtitle = Label(self.InfoFrame, text = "Average Time to Answer:")
+            self.avgtitle.grid()
+            self.avglabel = Label(self.InfoFrame, text = "hi")#f"{}")
+            self.avglabel.grid()
+
+            self.fasttitle = Label(self.InfoFrame, text = "Fastest Answer:")
+            self.fasttitle.grid()
+            self.fastlabel = Label(self.InfoFrame, text = "hi")#f"{}")
+            self.fastlabel.grid()
+            self.fastquestion = Label(self.InfoFrame, text = "hi")#f"{}")
+            self.fastquestion.grid()
+
+            self.slowtitle = Label(self.InfoFrame, text = "Slowest Answer:")
+            self.slowtitle.grid()
+            self.slowlabel = Label(self.InfoFrame, text = "hi")#f"{}")
+            self.slowlabel.grid()
+            self.slowquestion = Label(self.InfoFrame, text = "hi")#f"{}")
+            self.slowquestion.grid()
+
+            #TABLE FRAME
+            self.TableFrame = Frame(self.ResultsFrame)
+            self.TableFrame.grid(row = 1, column=1)
+
+            #BUTTON FRAME
+            self.menubutton = Button(self.ResultsFrame, text = "Back to Menu")
+            self.menubutton.grid(row = 2, column = 0, columnspan=2)
 
         welcomescreen()
 
