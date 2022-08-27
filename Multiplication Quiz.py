@@ -6,6 +6,7 @@ from tkinter import ttk
 from turtle import bgcolor, color
 from venv import create
 import tkinter as tk
+import time
 
 class Data:
 
@@ -60,16 +61,19 @@ class GUI:
 
         #EASY PROGRESS
         def progresseasy():
-            if self.progressbar['value'] < 100:
+            if self.progressbar['value'] < 95:
                 if self.sn.get() == self.data.qanswer:
                     self.progressbar['value'] += 5
-                    #self.results.configure(text = "Correct", color = "Green")
+                    self.results.configure(text = "Correct", fg = "green")
                     createeasy()
+
                 else:
-                    self.easytitle.configure(bg="red")
-                    #self.results.configure(text = f"Incorrect {self.data.qanswer}", color = "Red")
+                    self.progressbar['value'] += 5
+                    self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
+                    createeasy()
+
             else:
-                self.submitbutton.grid_forget()
+                finishscreen()
         
         def createeasy():
 
@@ -89,16 +93,19 @@ class GUI:
 
         #MEDIUM PROGRESS
         def progressmedium():
-            if self.progressbar['value'] < 100:
+            if self.progressbar['value'] < 95:
                 if int(self.entrybox.get()) == self.data.qanswer:
                     self.progressbar['value'] += 5
+                    self.results.configure(text = "Correct", fg = "green")
                     createmedium()
-                    #self.results.configure(text = "Correct", color = "Green")
+
                 else:
-                    self.easytitle.configure(bg="red")
-                    #self.results.configure(text = f"Incorrect {self.data.qanswer}", color = "Red")
-            else:
-                self.submitbutton.grid_forget()
+                    self.progressbar['value'] += 5
+                    self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
+                    createmedium()
+                    
+            else:  
+                finishscreen()
 
         def createmedium():
             self.data.generatemedium()
@@ -112,7 +119,10 @@ class GUI:
             self.ArrayFrame2.destroy()
 
             self.ArrayFrame2 = Frame(self.ArrayFrame)
-            self.ArrayFrame2.grid()
+            self.ArrayFrame2.grid(row = 1, column = 1)
+
+            self.arraynumber1.configure(text = f"{self.data.qnumber1}")
+            self.arraynumber2.configure(text = f"{self.data.qnumber2}")
 
             for y in range(self.data.qnumber2):
                 self.arrayrow = Frame(self.ArrayFrame2)
@@ -155,7 +165,7 @@ class GUI:
             self.mediumyrlvl = Label(self.mediumbutton, text = "Year 3 - 4")
             self.mediumpb = Label(self.mediumbutton, text = "Your Best Time:\n18 Seconds")
                                      
-            self.hardbutton= Button(self.WelcomeButtonFrame)
+            self.hardbutton = Button(self.WelcomeButtonFrame)
             self.hardlabel = Label(self.hardbutton, text = "Hard")
             self.hardyrlvl = Label(self.hardbutton, text = "Year 5 - 6")
             self.hardpb = Label(self.hardbutton, text = "Your Best Time:\n18 Seconds")
@@ -190,12 +200,12 @@ class GUI:
         
 
             #EASY SCREEN FRAME
-            self.EasyFrame = Frame(parent)
-            self.EasyFrame.grid()
+            self.QuizFrame = Frame(parent)
+            self.QuizFrame.grid(row = 1, column = 0)
 
 
             #EASY OP FRAME
-            self.TopFrame = Frame(self.EasyFrame)
+            self.TopFrame = Frame(parent)
             self.TopFrame.grid(row = 0, column = 0)
             self.progressbar = ttk.Progressbar(self.TopFrame, orient="horizontal", mode="determinate", length=150)
             self.progressbar.grid(row = 0)
@@ -204,7 +214,7 @@ class GUI:
 
 
             #EASY MIDDLE LEFT FRAME
-            self.MiddleLeftFrame = Frame(self.EasyFrame)
+            self.MiddleLeftFrame = Frame(self.QuizFrame)
             self.MiddleLeftFrame.grid(row = 1, column = 0)
             self.infobutton = Button(self.MiddleLeftFrame, text = "info")
             self.infobutton.grid(row = 0, column = 0)
@@ -230,14 +240,19 @@ class GUI:
 
 
             #EASY MIDDLE RIGHT FRAME
-            self.MiddleRightFrame = Frame(self.EasyFrame)
+            self.MiddleRightFrame = Frame(self.QuizFrame)
             self.MiddleRightFrame.grid(row = 1, column = 1)
 
             self.ArrayFrame = Frame(self.MiddleRightFrame)
             self.ArrayFrame.grid()
 
+            self.arraynumber1 = Label(self.ArrayFrame, text = self.data.qnumber1)
+            self.arraynumber1.grid(row = 0, column = 1)
+            self.arraynumber2 = Label(self.ArrayFrame, text = self.data.qnumber2)
+            self.arraynumber2.grid(row=1, column = 0)
+
             self.ArrayFrame2 = Frame(self.ArrayFrame)
-            self.ArrayFrame2.grid()
+            self.ArrayFrame2.grid(row = 1, column = 1)
 
             for y in range(self.data.qnumber2):
                 self.arrayrow = Frame(self.ArrayFrame2)
@@ -248,7 +263,7 @@ class GUI:
                     self.arraycircle.pack(side=tk.LEFT)
 
             #EASY BOTTOM FRAME
-            self.BottomFrame = Frame(self.EasyFrame)
+            self.BottomFrame = Frame(self.QuizFrame)
             self.BottomFrame.grid(row = 2)
             
             self.submitbutton = Button(self.BottomFrame, command = progresseasy, text = "progress")
@@ -265,19 +280,19 @@ class GUI:
             self.data.generatemedium()
 
             #MEDIUM FRAME
-            self.MediumFrame = Frame(parent)
-            self.MediumFrame.grid()
+            self.QuizFrame = Frame(parent)
+            self.QuizFrame.grid(row = 1, column = 0)
 
-            #TOP FRAME
-            self.TopFrame = Frame(self.MediumFrame)
+            #MEDIUM TOP FRAME
+            self.TopFrame = Frame(parent)
             self.TopFrame.grid(row = 0, column = 0)
             self.progressbar = ttk.Progressbar(self.TopFrame, orient="horizontal", mode="determinate", length=150)
             self.progressbar.grid(row = 0)
             self.mediumtitle = Label(self.TopFrame, text = "Multiplication Quiz - Medium")
             self.mediumtitle.grid(row = 1)
 
-            #MIDDLE FRAME
-            self.MiddleFrame = Frame(self.MediumFrame)
+            #MEDIUM MIDDLE FRAME
+            self.MiddleFrame = Frame(self.QuizFrame)
             self.MiddleFrame.grid(row = 1, column = 0)
             self.infobutton = Button(self.MiddleFrame, text = "info")
             self.infobutton.grid(row = 0, column = 0)
@@ -285,11 +300,11 @@ class GUI:
             self.questiontext.grid(row = 1, column = 2)
             self.entrybox = Entry(self.MiddleFrame, text = "")
             self.entrybox.grid(row = 1, column = 3)
-            self.results = Label(self.MiddleFrame, text = "")
+            self.results = Label(self.MiddleFrame, text = "hi")
             self.results.grid(row = 1, column = 4)
 
-            #BOTTOM FRAME
-            self.BottomFrame = Frame(self.MediumFrame)
+            #MEDIUM BOTTOM FRAME
+            self.BottomFrame = Frame(self.QuizFrame)
             self.BottomFrame.grid(row = 2)
             
             self.submitbutton = Button(self.BottomFrame, command = progressmedium, text = "progress")
@@ -297,7 +312,48 @@ class GUI:
 
 
 
-        #def hardscreen:
+        #def hardscreen():
+            
+            #HARD SCREEN FUNCTIONS
+            #self.WelcomeFrame.grid_forget()
+
+            #HARD SCREEN
+
+        def finishscreen():
+            
+            #FINISH SCREEN FUNCTIONS
+            self.QuizFrame.grid_forget()
+
+            self.progressbar.grid_forget()
+
+            #FINISH FRAME
+            self.FinishFrame = Frame(parent)
+            self.FinishFrame.grid(row = 1)
+
+            #TEXT FRAME
+            self.TextFrame = Frame(self.FinishFrame)
+            self.TextFrame.grid(row = 0)
+
+            self.bigtext = Label(self.TextFrame, text = "HI 1")
+            self.bigtext.grid()
+            self.scorelabel = Label(self.TextFrame, text = "HI 1")
+            self.scorelabel.grid()
+            self.timelabel = Label(self.TextFrame, text = "HI 1")
+            self.timelabel.grid()
+            self.smalltext = Label(self.TextFrame, text = "HI 1")
+            self.smalltext.grid()
+
+            #BUTTON FRAME
+            self.ButtomFrame = Frame(self.FinishFrame)
+            self.ButtomFrame.grid()
+
+            self.menubutton = Button(self.ButtomFrame, text = "Back to Menu")
+            self.menubutton.grid(row = 0, column = 0)
+
+            self.resultbutton = Button(self.ButtomFrame,text = "View Results")
+            self.resultbutton.grid(row = 0, column = 1)
+            
+
 
         welcomescreen()
 
