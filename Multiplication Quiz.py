@@ -39,6 +39,10 @@ class Data:
         self.qnumber2 = randrange(1,12)
         self.qanswer = self.qnumber1 * self.qnumber2
     
+    #SCORE KEEPING FUNCTION
+    def startscore(self):
+        self.score = 20
+
 
     #TIME KEEPING FUNCTIONS
 
@@ -71,6 +75,7 @@ class GUI:
 
                 else:
                     self.progressbar['value'] += 5
+                    self.data.score -= 1
                     self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
                     createeasy()
 
@@ -103,6 +108,7 @@ class GUI:
 
                 else:
                     self.progressbar['value'] += 5
+                    self.data.score -= 1
                     self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
                     createmedium()
                     
@@ -201,6 +207,8 @@ class GUI:
             self.sn = IntVar()
             self.sn.set(None)
 
+            self.data.startscore()
+
             #EASY SCREEN FRAME
             self.QuizFrame = Frame(parent)
             self.QuizFrame.grid(row = 1, column = 0)
@@ -281,6 +289,8 @@ class GUI:
 
             self.data.generatemedium()
 
+            self.data.startscore()
+
             #MEDIUM FRAME
             self.QuizFrame = Frame(parent)
             self.QuizFrame.grid(row = 1, column = 0)
@@ -338,7 +348,7 @@ class GUI:
 
             self.bigtext = Label(self.TextFrame, text = "HI 1")
             self.bigtext.grid()
-            self.scorelabel = Label(self.TextFrame, text = "HI 2")
+            self.scorelabel = Label(self.TextFrame, text = f"{self.data.score} out of 20")
             self.scorelabel.grid()
             self.timelabel = Label(self.TextFrame, text = "HI 3")
             self.timelabel.grid()
