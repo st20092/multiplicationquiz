@@ -45,6 +45,14 @@ class Data:
 
 
     #TIME KEEPING FUNCTIONS
+    def startoveralltime(self):
+
+        self.overallstart = time.time()
+
+    def stopoveralltime(self):
+
+        self.overallend = time.time()
+        self.overalltime = round((self.overallend - self.overallstart),2)
 
     #RESET VARIABLES FUNCTION
 
@@ -80,6 +88,7 @@ class GUI:
                     createeasy()
 
             else:
+                self.data.stopoveralltime()
                 finishscreen()
         
         def createeasy():
@@ -113,6 +122,7 @@ class GUI:
                     createmedium()
                     
             else:  
+                self.data.stopoveralltime()
                 finishscreen()
 
         def createmedium():
@@ -208,6 +218,7 @@ class GUI:
             self.sn.set(None)
 
             self.data.startscore()
+            self.data.startoveralltime()
 
             #EASY SCREEN FRAME
             self.QuizFrame = Frame(parent)
@@ -288,8 +299,9 @@ class GUI:
             self.WelcomeFrame.grid_forget()
 
             self.data.generatemedium()
-
             self.data.startscore()
+            self.data.startoveralltime()
+            
 
             #MEDIUM FRAME
             self.QuizFrame = Frame(parent)
@@ -350,7 +362,7 @@ class GUI:
             self.bigtext.grid()
             self.scorelabel = Label(self.TextFrame, text = f"{self.data.score} out of 20")
             self.scorelabel.grid()
-            self.timelabel = Label(self.TextFrame, text = "HI 3")
+            self.timelabel = Label(self.TextFrame, text = f"Finished in {self.data.overalltime} seconds")
             self.timelabel.grid()
             self.smalltext = Label(self.TextFrame, text = "HI 4")
             self.smalltext.grid()
