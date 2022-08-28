@@ -17,6 +17,11 @@ class Data:
 
         self.questionlist = []
 
+        self.qttimes = []
+
+        self.qt = ()
+        self.qt2 = ()
+
     #QUIZ GENERATING FUNCTIONS
     def generateeasy(self):
 
@@ -53,6 +58,19 @@ class Data:
 
         self.overallend = time.time()
         self.overalltime = round((self.overallend - self.overallstart),2)
+
+    def startqtime(self):
+
+        self.qt = time.time()
+
+    def stopqtime(self):
+
+        self.qt2 = time.time()
+
+        self.qttime = round((self.qt2 - self.qt),2)
+        self.qttimes.append(self.qttime)
+
+        self.startqtime()
 
     #RESET VARIABLES FUNCTION
 
@@ -114,12 +132,16 @@ class GUI:
                     self.progressbar['value'] += 5
                     self.results.configure(text = "Correct", fg = "green")
                     createmedium()
+                    self.data.stopqtime()
+                    self.testlabel.configure(text = f"{self.data.qttime}")
 
                 else:
                     self.progressbar['value'] += 5
                     self.data.score -= 1
                     self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
                     createmedium()
+                    self.data.stopqtime()
+                    self.testlabel.configure(text = f"{self.data.qttime}")
                     
             else:  
                 self.data.stopoveralltime()
@@ -300,8 +322,9 @@ class GUI:
 
             self.data.generatemedium()
             self.data.startscore()
+
             self.data.startoveralltime()
-            
+            self.data.startqtime()
 
             #MEDIUM FRAME
             self.QuizFrame = Frame(parent)
@@ -330,6 +353,9 @@ class GUI:
             #MEDIUM BOTTOM FRAME
             self.BottomFrame = Frame(self.QuizFrame)
             self.BottomFrame.grid(row = 2)
+
+            self.testlabel = Label(self.BottomFrame, text = "hi")
+            self.testlabel.grid()
             
             self.submitbutton = Button(self.BottomFrame, command = progressmedium, text = "progress")
             self.submitbutton.grid()
