@@ -22,6 +22,7 @@ class Data:
         self.qt = ()
         self.qt2 = ()
 
+
     #QUIZ GENERATING FUNCTIONS
     def generateeasy(self):
 
@@ -97,13 +98,17 @@ class GUI:
                 if self.sn.get() == self.data.qanswer:
                     self.progressbar['value'] += 5
                     self.results.configure(text = "Correct", fg = "green")
+                    self.data.questionlist.append(f"{self.data.qnumber1} x {self.data.qnumber2} = {self.sn.get()} ✓")
                     createeasy()
+                    self.data.stopqtime()
 
                 else:
                     self.progressbar['value'] += 5
                     self.data.score -= 1
                     self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
+                    self.data.questionlist.append(f"{self.data.qnumber1} x {self.data.qnumber2} = {self.sn.get()} X")
                     createeasy()
+                    self.data.stopqtime()
 
             else:
                 self.data.stopoveralltime()
@@ -131,17 +136,17 @@ class GUI:
                 if int(self.entrybox.get()) == self.data.qanswer:
                     self.progressbar['value'] += 5
                     self.results.configure(text = "Correct", fg = "green")
+                    self.data.questionlist.append(f"{self.data.qnumber1} x {self.data.qnumber2} = {self.entrybox.get()} ✓")
                     createmedium()
                     self.data.stopqtime()
-                    self.testlabel.configure(text = f"{self.data.qttime}")
 
                 else:
                     self.progressbar['value'] += 5
                     self.data.score -= 1
                     self.results.configure(text = f"Incorrect {self.data.qanswer}", fg = "red")
+                    self.data.questionlist.append(f"{self.data.qnumber1} x {self.data.qnumber2} = {self.entrybox.get()} X")
                     createmedium()
                     self.data.stopqtime()
-                    self.testlabel.configure(text = f"{self.data.qttime}")
                     
             else:  
                 self.data.stopoveralltime()
@@ -235,12 +240,13 @@ class GUI:
             self.WelcomeFrame.grid_forget()
 
             self.data.generateeasy()
-    
+            self.data.startscore()
+
             self.sn = IntVar()
             self.sn.set(None)
 
-            self.data.startscore()
             self.data.startoveralltime()
+            self.data.startqtime()
 
             #EASY SCREEN FRAME
             self.QuizFrame = Frame(parent)
@@ -356,6 +362,12 @@ class GUI:
 
             self.testlabel = Label(self.BottomFrame, text = "hi")
             self.testlabel.grid()
+
+            self.testlabel2 = Label(self.BottomFrame, text = "hello")
+            self.testlabel2.grid()
+
+            self.testlabel3 = Label(self.BottomFrame, text = "g'day")
+            self.testlabel3.grid()
             
             self.submitbutton = Button(self.BottomFrame, command = progressmedium, text = "progress")
             self.submitbutton.grid()
@@ -421,7 +433,7 @@ class GUI:
             self.InfoFrame.grid(row = 1, column=0)
             self.avgtitle = Label(self.InfoFrame, text = "Average Time to Answer:")
             self.avgtitle.grid()
-            self.avglabel = Label(self.InfoFrame, text = "hi")#f"{}")
+            self.avglabel = Label(self.InfoFrame, text = f"{sum(self.data.qttimes)/len(self.data.qttimes)} Seconds")
             self.avglabel.grid()
 
             self.fasttitle = Label(self.InfoFrame, text = "Fastest Answer:")
@@ -441,6 +453,28 @@ class GUI:
             #TABLE FRAME
             self.TableFrame = Frame(self.ResultsFrame)
             self.TableFrame.grid(row = 1, column=1)
+
+            self.column1 = Label(self.TableFrame, text = "Questions")
+            self.column1.grid(row = 0, column = 0)
+
+            self.QColumnFrame = Frame(self.TableFrame)
+            self.QColumnFrame.grid(row = 1, column = 0)
+
+            for q in self.data.questionlist:
+                self.ql = Label(self.QColumnFrame, text = f"{q}", width = 20, borderwidth= 1, relief = "solid")
+                self.ql.grid()
+
+            self.column2 = Label(self.TableFrame, text = "Time to Finish (s)")
+            self.column2.grid(row = 0, column = 1)
+
+            self.TColumnFrame = Frame(self.TableFrame)
+            self.TColumnFrame.grid(row = 1, column = 1)
+
+            for t in self.data.qttimes:
+                self.tl = Label(self.TColumnFrame, text = f"{t}", width = 20, borderwidth= 1, relief = "solid")
+                self.tl.grid()
+
+            
 
             #BUTTON FRAME
             self.menubutton = Button(self.ResultsFrame, text = "Back to Menu")
